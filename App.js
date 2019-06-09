@@ -26,7 +26,9 @@ export default class App extends React.Component {
     console.log(this.state.data)
     this.setState({currNum:this.state.currNum--});
   }
-
+  clearAll(){
+    this.setState({data:[]})
+  }
 
   render() {
 
@@ -48,7 +50,12 @@ export default class App extends React.Component {
               renderItem = {({item}) => <View><Text style={styles.text} >{item.task}</Text><TouchableOpacity onPress = {() => this.removeText(item)}><Text>Remove</Text></TouchableOpacity></View>}
               />
 
-          </View>
+        </View>
+        <View style = {{flexDirection:'row',justifyContent:'flex-end'}}>
+          <TouchableOpacity onPress = {()=>this.clearAll()}>
+            <Text>Clear all entries</Text>
+          </TouchableOpacity>
+        </View>
 
       </View>
 
