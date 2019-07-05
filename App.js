@@ -1,11 +1,14 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { StyleSheet, Text, View, TextInput,TouchableOpacity, FlatList} from 'react-native';
 
 
 export default class App extends React.Component {
 
   constructor(props){
-    const data = [];
+    const data = [{
+      task:'Walk dog',
+      date: new Date().toISOString()
+    }];
     super(props);
     this.state ={
       text: 'Enter activity here',
@@ -16,7 +19,11 @@ export default class App extends React.Component {
 
   }
   updateText(){
-    this.setState({data:this.state.data.concat({key:this.state.currNum.toString(),task:this.state.text})});
+    const newData = {
+      task: this.state.text,
+      date: new Date().toISOString()
+    }
+    this.setState({data:this.state.data.concat({key:this.state.currNum.toString(),newData})});
     this.state.currNum++;
 
   }
@@ -31,12 +38,12 @@ export default class App extends React.Component {
   }
 
   render() {
-
+    const [text, setText] = useState('')
     return (
       <View style={styles.container}>
         <Text></Text>
         <View style = {{flexDirection:'row',justifyContent:'flex-end'}}>
-          <TextInput style = {{fontSize:30,borderColor:'black', flex:1, marginTop:20}} onChangeText = {(text) => this.setState({text})}value = {this.state.text}/>
+          <TextInput style = {{fontSize:30,borderColor:'black', flex:1, marginTop:20}} onChangeText = {() => setText(event.target.value)}value = {this.state.text}/>
           <TouchableOpacity style = {{marginTop:20}}onPress = {()=>(this.updateText())}>
             <Text>Add to list</Text>
 
@@ -47,9 +54,15 @@ export default class App extends React.Component {
         <View style = {{flex:1, flexDirection:'row'}}>
             <FlatList
               data = {this.state.data}
-              renderItem = {({item}) => <View><Text style={styles.text} >{item.task}</Text><TouchableOpacity onPress = {() => this.removeText(item)}><Text>Remove</Text></TouchableOpacity></View>}
+              renderItem = {({item}) =>
+              <View>
+                <Text style={styles.text} >{item.task}</Text>
+                <Text style={styles.text}>Added: {item.date}</Text>
+                <TouchableOpacity onPress = {() => this.removeText(item)}>
+                  <Text>Remove</Text>
+                </TouchableOpacity>
+              </View>}
               />
-
         </View>
         <View style = {{flexDirection:'row',justifyContent:'flex-end'}}>
           <TouchableOpacity onPress = {()=>this.clearAll()}>
